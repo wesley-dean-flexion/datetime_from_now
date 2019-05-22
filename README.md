@@ -9,7 +9,7 @@ Similarly, the entire program is self-contained in a single file; it can be copi
 The following is the result of using the `--help` flag:
 ```
 usage: from_now.py [-h] [-w WEEKS] [-d DAYS] [-H HOURS] [-m MINUTES]
-                   [-s SECONDS] [-i INPUT_FORMAT] [-o OUTPUT_FORMAT]
+                   [-s SECONDS] [-i INPUT_FORMAT] [-o OUTPUT_FORMAT] [-u]
                    [date]
 
 This tool will find the date / time relative to another date / time.To use
@@ -19,7 +19,7 @@ tool will then write the resulting date/time to STDOUT.The relative values
 (e.g., weeks, days, etc.) may be positive (meaning the resulting date will be
 after the provided date) or negative (meaning the resulting date will be
 before the provided date.A date / time format may also be specified with
---input-format and --output-format
+--input-format and --output-format and defaults to ISO-8601
 
 positional arguments:
   date                  date /time from which to calculate (defaults to
@@ -40,17 +40,19 @@ optional arguments:
                         date input format string
   -o OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
                         date output format string
+  -u, --utc             set to use UTC; otherwise, use local timezone
 ```
 
 ## Default format
-%Y-%m%dT%%H%M%S
+The default time format is ISO-8601; this corresponds to the Python datetime format string of:
+`%Y-%m-%dT%%H%M%S.%fZ`
 
 ## Examples
 ```shell
-from_now.py --days 7
+from_now.py --utc --days 7
 ```
 
-Result: `2019-05-27T23:14:27`
+Result: `2019-05-27T23:14:27.522175Z`
 
 This will return the date / time exactly seven days from right now.
 
