@@ -1,6 +1,26 @@
 # datetime_from_now
 This is a quick Python script to accept a datetime, apply a delta, and display the result
 
+## Why?
+The initial reason for putting this tool together was to assist in finding AWS EC2 instances older than a certain age.  Here's a result that came up in search results:
+
+https://github.com/aws/aws-cli/issues/1209
+
+The short version is to use the AWS CLI like so:
+
+```shell
+aws ec2 describe-instances --query 'Reservations[].Instances[?LaunchTime>=`2015-03-01`][].{id: InstanceId, type: InstanceType, launched: LaunchTime}'
+```
+
+The original page includes some shell scripting to get around different invocations of GNU and BSD 'date' commands.  To get around that ugliness, a script written in Python was written.  Consider this:
+
+```shell
+aws ec2 describe-instances --query 'Reservations[].Instances[?LaunchTime>=$(from_now.py --utc --hours -1)][].{id: InstanceId, type: InstanceType, launched: LaunchTime}'
+```
+
+This matches instances launched in the past hour.  Isn't that fun?!
+
+
 ## Installation
 This script only imports from datetime which is a part of the Python Standard Library; therefore, no extra modules are required.
 Similarly, the entire program is self-contained in a single file; it can be copied anywhere where Python is installed and run there.
