@@ -26,7 +26,9 @@ import argparse
 #
 # For more information, see the standard library documentation:
 # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
-default_format = "%Y-%m-%dT%H:%M:%S"
+#
+# Note: the default format is ISO-8601
+default_format = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 # Set runtime variables
@@ -42,7 +44,8 @@ argparser = argparse.ArgumentParser(
     "date will be after the provided date) or negative (meaning the resulting date will "
     "be before the provided date."
     ""
-    "A date / time format may also be specified with --input-format and --output-format"
+    "A date / time format may also be specified with --input-format and --output-format and "
+    "defaults to ISO-8601"
 )
 
 argparser.add_argument("-w", "--weeks", type=int,
@@ -58,6 +61,7 @@ argparser.add_argument("-i", "--input-format", type=str,
                        help="date input format string", default=default_format)
 argparser.add_argument("-o", "--output-format", type=str,
                        help="date output format string", default=default_format)
+argparser.add_argument("-u", "--utc", help="set to use UTC; otherwise, use local timezone", action="store_true")
 argparser.add_argument(
     "date", type=str, help="date /time from which to calculate (defaults to current date / time)", default="", nargs="?")
 
@@ -68,7 +72,11 @@ args = argparser.parse_args()
 
 # if we get nothing (or "now") then assume the current date / time
 if ((args.date == None) or (args.date == "") or (args.date == "now")):
+  if (args.utc):
+    target_date = datetime.utcnow()
+  else:
     target_date = datetime.now()
+
 # if we get a string, attempt to parse that string into a datetime object
 else:
     target_date = datetime.strptime(args.date, args.input_format)
