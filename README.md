@@ -77,7 +77,7 @@ Result: `2019-05-27T23:14:27.522175Z`
 This will return the date / time exactly seven days from right now.
 
 ```shell
-from_now.py --hours -1 --input-format "%Y%m%d"
+from_now.py --hours -1 --output-format "%Y%m%d"
 ```
 
 Result: `20190520`
